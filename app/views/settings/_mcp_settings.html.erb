@@ -1,0 +1,74 @@
+<table class="list">
+  <tbody>
+    <tr>
+      <th><label for="settings_enabled">Enable MCP Server</label></th>
+      <td>
+        <%= hidden_field_tag 'settings[enabled]', '0' %>
+        <%= check_box_tag 'settings[enabled]', '1', @settings['enabled'] == '1' %>
+        <em class="info">Allow MCP clients to connect</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_enable_write_operations">Enable Write Operations</label></th>
+      <td>
+        <%= hidden_field_tag 'settings[enable_write_operations]', '0' %>
+        <%= check_box_tag 'settings[enable_write_operations]', '1',
+            @settings['enable_write_operations'] == '1' %>
+        <em class="info">Allow AI to create/update issues, log time, edit wiki (disabled by default for safety)</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_rate_limit">Rate Limit (requests/min)</label></th>
+      <td>
+        <%= number_field_tag 'settings[rate_limit]', @settings['rate_limit'],
+            min: 1, max: 1000, size: 5 %>
+        <em class="info">Per-user limit to prevent runaway AI loops (1-1000)</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_heartbeat_interval">Heartbeat Interval (seconds)</label></th>
+      <td>
+        <%= number_field_tag 'settings[heartbeat_interval]', @settings['heartbeat_interval'],
+            min: 1, max: 300, size: 5 %>
+        <em class="info">SSE ping frequency to keep connections alive (1-300)</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_request_timeout">Request Timeout (seconds)</label></th>
+      <td>
+        <%= number_field_tag 'settings[request_timeout]', @settings['request_timeout'],
+            min: 5, max: 300, size: 5 %>
+        <em class="info">Max tool execution time (5-300)</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_sse_timeout">SSE Connection Timeout (seconds)</label></th>
+      <td>
+        <%= number_field_tag 'settings[sse_timeout]', @settings['sse_timeout'],
+            min: 60, max: 86400, size: 5 %>
+        <em class="info">Max duration before server closes SSE connection (60-86400)</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_default_limit">Default List Limit</label></th>
+      <td>
+        <%= number_field_tag 'settings[default_limit]', @settings['default_limit'],
+            min: 1, max: 100, size: 5 %>
+        <em class="info">Default items per page for list operations (1-100)</em>
+      </td>
+    </tr>
+    <tr>
+      <th><label for="settings_max_limit">Maximum List Limit</label></th>
+      <td>
+        <%= number_field_tag 'settings[max_limit]', @settings['max_limit'],
+            min: 1, max: 500, size: 5 %>
+        <em class="info">Maximum items per page (1-500)</em>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="info">
+  <strong>MCP Endpoint:</strong> <code><%= Setting.protocol %>://<%= Setting.host_name %>/mcp</code><br>
+  <strong>Authentication:</strong> Use <code>X-Redmine-API-Key</code> header with your API key
+</p>
