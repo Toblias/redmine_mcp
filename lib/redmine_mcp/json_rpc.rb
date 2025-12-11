@@ -8,7 +8,7 @@ module RedmineMcp
   #
   class JsonRpc
     PROTOCOL_VERSION = '2024-11-05'
-    SERVER_VERSION = '1.1.0'
+    SERVER_VERSION = '1.2.0'
 
     class << self
       # Main entry point for JSON-RPC processing.
@@ -111,7 +111,17 @@ module RedmineMcp
         tool_params = params['arguments'] || {}
 
         # Check write protection for mutating tools
-        write_tools = %w[create_issue update_issue delete_issue bulk_update_issues bulk_delete_issues log_time delete_time_entry update_wiki_page create_project update_project delete_project]
+        write_tools = %w[
+          create_issue update_issue delete_issue bulk_update_issues bulk_delete_issues
+          log_time delete_time_entry update_wiki_page
+          create_project update_project delete_project
+          create_tracker update_tracker delete_tracker
+          create_status update_status delete_status
+          create_priority update_priority delete_priority
+          create_activity update_activity delete_activity
+          create_category update_category delete_category
+          create_version update_version delete_version
+        ]
         if write_tools.include?(tool_name)
           unless Setting.plugin_redmine_mcp['enable_write_operations'] == '1'
             raise RedmineMcp::WriteOperationsDisabled,

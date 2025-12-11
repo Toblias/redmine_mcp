@@ -17,7 +17,7 @@ All operations respect Redmine's permission system, ensuring AI assistants only 
 
 ## Features
 
-- **31 Comprehensive Tools** for issue management, project navigation, time tracking, wiki editing, attachments, and metadata queries
+- **49 Comprehensive Tools** for issue management, project navigation, time tracking, wiki editing, attachments, metadata queries, and admin configuration
 - **5 Smart Prompts** with embedded live data for bug reports, status reports, sprint summaries, and release notes
 - **6 Resource Templates** for efficient data access via URI patterns
 - **HTTP + SSE Transport** for full MCP protocol compliance
@@ -80,6 +80,56 @@ Access plugin settings at **Administration > Plugins > Redmine MCP Server > Conf
 3. **Rate Limiting:** Prevents AI from making excessive requests. Adjust based on your server capacity.
 4. **Permissions:** All operations respect Redmine permissions. Users can only access data they're authorized to see.
 
+## Initial Setup Checklist
+
+Before using the MCP plugin to create issues, ensure your Redmine instance has the following configured:
+
+### Required Configuration
+
+These items are required to create issues:
+
+- [ ] **Issue Statuses** - At least one status (e.g., New, In Progress, Closed)
+- [ ] **Issue Trackers** - At least one tracker (e.g., Bug, Feature, Task)
+- [ ] **Issue Priorities** - At least one priority (e.g., Low, Normal, High)
+- [ ] **Time Entry Activities** - At least one activity for time tracking (e.g., Development, Design)
+
+### Optional Configuration
+
+- [ ] **Issue Categories** - Per-project categorization
+- [ ] **Versions/Milestones** - Per-project release tracking
+
+### Quick Setup via MCP (Admin Only)
+
+If your Redmine is freshly installed, you can use the admin tools to set up the basics:
+
+```
+1. create_status   - Create "New", "In Progress", "Closed" statuses
+2. create_tracker  - Create "Bug", "Feature", "Task" trackers (requires statuses first)
+3. create_priority - Create "Low", "Normal", "High", "Urgent" priorities
+4. create_activity - Create "Development", "Design", "Testing" activities
+```
+
+**Example workflow:**
+```
+# First, create statuses (required for trackers)
+create_status(name: "New", is_closed: false)
+create_status(name: "In Progress", is_closed: false)
+create_status(name: "Closed", is_closed: true)
+
+# Then create trackers (requires a default status)
+create_tracker(name: "Bug", default_status_id: 1)
+create_tracker(name: "Feature", default_status_id: 1)
+
+# Create priorities
+create_priority(name: "Low")
+create_priority(name: "Normal", is_default: true)
+create_priority(name: "High")
+
+# Create activities for time tracking
+create_activity(name: "Development", is_default: true)
+create_activity(name: "Design")
+```
+
 ## MCP Endpoint
 
 The plugin exposes a single MCP endpoint at your Redmine base URL:
@@ -116,7 +166,7 @@ curl -X POST \
 
 ## Tools
 
-The plugin provides 31 tools organized into categories:
+The plugin provides 49 tools organized into categories:
 
 ### Issue Tools (8)
 
@@ -183,6 +233,54 @@ The plugin provides 31 tools organized into categories:
 | `list_activities` | List time entry activities (global or project-specific) |
 | `list_versions` | List project versions/milestones |
 | `list_categories` | List issue categories for a project |
+
+### Admin Tools - Trackers (3)
+
+| Tool | Description |
+|------|-------------|
+| `create_tracker` | Create a new issue tracker (admin only) |
+| `update_tracker` | Update an existing tracker (admin only) |
+| `delete_tracker` | Delete a tracker (admin only, fails if issues exist) |
+
+### Admin Tools - Statuses (3)
+
+| Tool | Description |
+|------|-------------|
+| `create_status` | Create a new issue status (admin only) |
+| `update_status` | Update an existing status (admin only) |
+| `delete_status` | Delete a status (admin only, fails if in use) |
+
+### Admin Tools - Priorities (3)
+
+| Tool | Description |
+|------|-------------|
+| `create_priority` | Create a new issue priority (admin only) |
+| `update_priority` | Update an existing priority (admin only) |
+| `delete_priority` | Delete a priority (admin only, fails if issues use it) |
+
+### Admin Tools - Activities (3)
+
+| Tool | Description |
+|------|-------------|
+| `create_activity` | Create a new time entry activity (admin only) |
+| `update_activity` | Update an existing activity (admin only) |
+| `delete_activity` | Delete an activity (admin only, fails if time entries use it) |
+
+### Category Tools (3)
+
+| Tool | Description |
+|------|-------------|
+| `create_category` | Create a new issue category in a project |
+| `update_category` | Update an existing category |
+| `delete_category` | Delete a category (can reassign issues) |
+
+### Version Tools (3)
+
+| Tool | Description |
+|------|-------------|
+| `create_version` | Create a new version/milestone in a project |
+| `update_version` | Update an existing version |
+| `delete_version` | Delete a version (fails if issues assigned) |
 
 For detailed parameter documentation and examples, see [docs/TOOLS.md](docs/TOOLS.md).
 
