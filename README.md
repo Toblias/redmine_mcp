@@ -17,7 +17,7 @@ All operations respect Redmine's permission system, ensuring AI assistants only 
 
 ## Features
 
-- **28 Comprehensive Tools** for issue management, project navigation, time tracking, wiki editing, attachments, and metadata queries
+- **31 Comprehensive Tools** for issue management, project navigation, time tracking, wiki editing, attachments, and metadata queries
 - **5 Smart Prompts** with embedded live data for bug reports, status reports, sprint summaries, and release notes
 - **6 Resource Templates** for efficient data access via URI patterns
 - **HTTP + SSE Transport** for full MCP protocol compliance
@@ -116,7 +116,7 @@ curl -X POST \
 
 ## Tools
 
-The plugin provides 28 tools organized into categories:
+The plugin provides 31 tools organized into categories:
 
 ### Issue Tools (8)
 
@@ -131,12 +131,15 @@ The plugin provides 28 tools organized into categories:
 | `bulk_update_issues` | Update multiple issues at once with common changes |
 | `bulk_delete_issues` | Delete multiple issues at once (requires delete_issues permission) |
 
-### Project Tools (2)
+### Project Tools (5)
 
 | Tool | Description |
 |------|-------------|
 | `list_projects` | List all visible projects with filtering by status |
 | `get_project` | Get project details including members, versions, enabled modules |
+| `create_project` | Create a new project with modules, trackers, and parent settings |
+| `update_project` | Update project settings, modules, parent, and visibility |
+| `delete_project` | Delete a project and all its data (admin only, irreversible) |
 
 ### Time Entry Tools (4)
 
